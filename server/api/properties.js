@@ -10,13 +10,27 @@ const publicConfig = {
   secure: true
 };
 const url =
-  "https://www.nycourts.gov/courts/2jd/kings/civil/foreclosures/2017/";
+  "https://www.nycourts.gov/courts/2jd/kings/civil/foreclosures/2017/"; //url to auction listing
 const gmAPI = new GoogleMapsAPI(publicConfig);
 
 module.exports = router;
 
+var properties = gatherData();
 router.get("/", (req, res, next) => {
-  console.log("starting api");
+  //   if (!err && propertiesDataStore && propertiesDataStore.query_value.length > 1 && new Date(propertiesDataStore.query_value[0].auction_date) > new Date()) {
+  //     return json.res(propertiesDataStore);
+  //   } else {
+  //     gatherData();
+  //   }
+
+  //properties.then(res.json, res.status(500).json);
+  properties.then(r => {
+    res.status(200).json(r);
+  });
+});
+
+function gatherData() {
+  console.log("gathering data");
   var query = "a";
   var options = {
     url: url,
@@ -24,26 +38,20 @@ router.get("/", (req, res, next) => {
       "User-Agent": "Chrome/33.0.1750.117"
     }
   };
-  gatherData();
-
-  function gatherData() {
-    console.log("gathering data");
+  return new Promise((resolve, reject) => {
     request(options, function(err, response, body) {
-      console.log("request");
-      if (err) return res.json("errr");
-      if (response.statusCode !== 200) return res.json(null, body);
+      if (err) reject(Error(err)); //checking errors
+      if (response.statusCode !== 200) reject(body);
       var $ = cheerio.load(body);
       var counter = 0;
       var tempArray = [];
       var day = new Date();
 
       parseAll($, (err, metadata) => {
-        if (err) return res.json(err);
-
+        if (err) reject(err);
         var result = {
           metadata: metadata
         };
-
         function performQuery(q) {
           var pdfArray = [];
           if (!q) return null;
@@ -64,7 +72,7 @@ router.get("/", (req, res, next) => {
                     .split("/")[7]
                     .replace(/-/g, " ")
                     .replace(/.pdf/g, "") + ", Brooklyn, Ny",
-                auction_date: day.setDate(
+                auctionDate: day.setDate(
                   day.getDate() + (4 + 7 - day.getDay()) % 7
                 ),
                 time: "2:30 PM",
@@ -72,7 +80,6 @@ router.get("/", (req, res, next) => {
               });
             }
           });
-
           _.each(pdfArray, function(prop) {
             var geocodeParams = {
               address: prop.address,
@@ -104,13 +111,13 @@ router.get("/", (req, res, next) => {
                   //   result,
                   //   (err, value) => {}
                   // );
-                  console.log(result, "ress");
-                  return res.json(null, result);
+                  // console.log(result.query_value);
+                  resolve(result);
                 }
               }
             });
           });
-          return pdfArray;
+          resolve(pdfArray);
         }
 
         result.url = url;
@@ -119,7 +126,6 @@ router.get("/", (req, res, next) => {
           result.query = [];
           result.query_value = [];
           result.query_error = [];
-
           _.each(query, q => {
             try {
               let data = performQuery(q);
@@ -134,14 +140,16 @@ router.get("/", (req, res, next) => {
           try {
             performQuery(query);
           } catch (e) {
-            result.query_error = (e && e.message) || e;
-            return res.json(null, result);
+            reject(e);
+            // result.query_error = (e && e.message) || e;
+            // return res.json(null, result);
           }
         }
-
-        // return res.json(null, result);
+        resolve(result);
       });
     });
-    // }
-  }
-});
+  });
+
+  // }
+  // return p;
+}

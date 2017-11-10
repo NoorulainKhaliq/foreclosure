@@ -1,4 +1,5 @@
-const User = require('./user')
+const User = require("./user");
+const Property = require("./property");
 
 /**
  * If we had any associations to make, this would be a great place to put them!
@@ -15,4 +16,4 @@ const User = require('./user')
  */
 module.exports = {
   User
-}
+};

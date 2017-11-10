@@ -15,48 +15,40 @@ export default class Properties extends Component {
       .get("/api/properties")
       .then(res => res.data)
       .then(properties => {
-        let hasDupes = false;
-        let found = [];
-        //console.log(properties.query_value[0].formatedAddress.place_id);
-        properties.forEach(p => {
-          if (!p.formatedAddress) {
-            found.push(p);
-            console.log(p.address.replace(",", ""));
+        let found = []; //properties that have no formatted_address
+        properties.forEach(property => {
+          if (!property.formatedAddress) {
+            found.push(property);
           }
         });
-        console.log(found);
-        // properties.query_value.reduce((f, p) => {
-        //   console.log(p);
-        //   if (f.includes(p)) {
-        //     hasDupes = true;
-        //   }
-        //   if (!hasDupes && !f.includes(p)) {
-        //     f.push(p);
-        //   }
-        //   return f;
-        // }, []);
-        // console.log(hasDupes);
         return this.setState({ properties });
       });
   }
 
-  componentDidUpdate() {
-    console.log(this.state.properties);
-  }
   render() {
     const results =
       this.state.properties.length > 0 ? this.state.properties : null;
-    // console.log(results);
     const image = !!results ? results[0].formatedAddress.streetView : null;
+    console.log(results);
+    //const addresses = [];
+    // console.log("these are results ", results);
+    // for (let i = 0; i < results.length; i++) {
+    //   addresses.push(results[i]);
+    // }
+    // console.log("these are from the loop ", addresses);
+
     return (
       <div className="main">
         <div className="property-list">
           {results &&
             results.map((property, i) => {
               return (
-                <div key={i}>
-                  <Link to={property.PDFlink} />
-                  <p>{property.address}</p>
+                <div className="property-info" key={i}>
+                  <a href={property.PDFlink}>Prop Details</a>
+                  <p>Address: {property.address}</p>
+                  {property.formatedAddress && (
+                    <img src={property.formatedAddress.streetView} />
+                  )}
                 </div>
               );
             })}

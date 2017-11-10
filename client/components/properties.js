@@ -28,15 +28,6 @@ export default class Properties extends Component {
   render() {
     const results =
       this.state.properties.length > 0 ? this.state.properties : null;
-    const image = !!results ? results[0].formatedAddress.streetView : null;
-    console.log(results);
-    //const addresses = [];
-    // console.log("these are results ", results);
-    // for (let i = 0; i < results.length; i++) {
-    //   addresses.push(results[i]);
-    // }
-    // console.log("these are from the loop ", addresses);
-
     return (
       <div className="main">
         <div className="property-list">

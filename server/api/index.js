@@ -1,7 +1,6 @@
 const router = require("express").Router();
 module.exports = router;
 
-router.use("/users", require("./users"));
 router.use("/properties", require("./properties"));
 
 router.use((req, res, next) => {

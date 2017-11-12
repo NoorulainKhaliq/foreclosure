@@ -4,13 +4,13 @@ import { withGoogleMap, GoogleMap, Marker } from "react-google-maps";
 
 class Map extends Component {
   render() {
-    const markers = this.props.markers || [];
+    const marker = this.props.marker || {};
     return (
       <GoogleMap
         defaultZoom={this.props.zoom}
         defaultCenter={this.props.center}
       >
-        {markers.map((marker, index) => <Marker {...marker} />)}
+        <Marker position={marker} />
       </GoogleMap>
     );
   }

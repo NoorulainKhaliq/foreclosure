@@ -7,8 +7,13 @@ export default class Properties extends Component {
   constructor() {
     super();
     this.state = {
-      properties: []
+      properties: [],
+      coordinates: {
+        lat: 0,
+        lng: 0
+      }
     };
+    this.setCoordinates = this.setCoordinates.bind(this);
   }
 
   componentWillMount() {
@@ -26,6 +31,15 @@ export default class Properties extends Component {
       });
   }
 
+  setCoordinates(lat, lng) {
+    this.setState({
+      coordinates: {
+        lat,
+        lng
+      }
+    });
+  }
+
   render() {
     const results =
       this.state.properties.length > 0 ? this.state.properties : null;
@@ -39,7 +53,19 @@ export default class Properties extends Component {
                   <a href={property.PDFlink}>Prop Details</a>
                   <p>Address: {property.address}</p>
                   {property.formatedAddress && (
-                    <img src={property.formatedAddress.streetView} />
+                    <img
+                      src={property.formatedAddress.streetView}
+                      onClick={() => {
+                        this.setCoordinates(
+                          parseFloat(
+                            property.formatedAddress.geometry.location.lat
+                          ),
+                          parseFloat(
+                            property.formatedAddress.geometry.location.lng
+                          )
+                        );
+                      }}
+                    />
                   )}
                 </div>
               );
@@ -48,6 +74,10 @@ export default class Properties extends Component {
         <div>
           <Map
             center={{ lat: 40.650002, lng: -73.949997 }}
+            marker={{
+              lat: this.state.coordinates.lat,
+              lng: this.state.coordinates.lng
+            }}
             zoom={13}
             containerElement={<div style={{ height: `100%` }} />}
             mapElement={<div style={{ height: `400px` }} />}

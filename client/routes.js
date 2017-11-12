@@ -3,7 +3,7 @@ import { Router } from "react-router";
 import { Route, Switch } from "react-router-dom";
 import PropTypes from "prop-types";
 import history from "./history";
-import { Main, Properties } from "./components";
+import { Main, Properties, Map } from "./components";
 
 function Routes() {
   return (

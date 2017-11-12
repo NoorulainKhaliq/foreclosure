@@ -5,3 +5,4 @@
  */
 
 export { default as Properties } from "./properties";
+export { default as Map } from "./googleMap";

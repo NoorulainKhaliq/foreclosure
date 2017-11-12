@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Map from "./googleMap";
 
 export default class Properties extends Component {
   constructor() {
@@ -43,6 +44,14 @@ export default class Properties extends Component {
                 </div>
               );
             })}
+        </div>
+        <div>
+          <Map
+            center={{ lat: 40.650002, lng: -73.949997 }}
+            zoom={13}
+            containerElement={<div style={{ height: `100%` }} />}
+            mapElement={<div style={{ height: `400px` }} />}
+          />
         </div>
       </div>
     );

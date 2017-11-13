@@ -26,12 +26,6 @@ export default class Properties extends Component {
       .get("/api/properties")
       .then(res => res.data)
       .then(properties => {
-        let found = []; //properties that have no formatted_address
-        properties.forEach(property => {
-          if (!property.formatedAddress) {
-            found.push(property);
-          }
-        });
         return this.setState({ properties });
       });
   }
@@ -63,17 +57,13 @@ export default class Properties extends Component {
                 <div className="property-info" key={i}>
                   <a href={property.PDFlink}>Prop Details</a>
                   <p>Address: {property.address}</p>
-                  {property.formatedAddress && (
+                  {property && (
                     <img
-                      src={property.formatedAddress.streetView}
+                      src={property.streetView}
                       onClick={() => {
                         this.setCoordinates(
-                          parseFloat(
-                            property.formatedAddress.geometry.location.lat
-                          ),
-                          parseFloat(
-                            property.formatedAddress.geometry.location.lng
-                          )
+                          parseFloat(property.lat),
+                          parseFloat(property.lng)
                         );
                       }}
                     />

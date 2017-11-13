@@ -1,5 +1,6 @@
 body {
   font-family: sans-serif;
+  margin-left: 20px;
 
   a {
     text-decoration: none;
@@ -17,5 +18,16 @@ body {
   form div {
     margin: 1em;
     display: inline-block;
+  }
+
+  .property-info {
+    background-color: lightgrey;
+    margin: 25px 0 25px;
+    text-align: center;
+    padding-top: 25px;
+
+    p {
+      text-align: center;
+    }
   }
 }

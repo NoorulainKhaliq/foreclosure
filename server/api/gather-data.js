@@ -48,6 +48,8 @@ function getPropertiesPage() {
   });
 }
 
+//parsed all the html page, extracted links and put them into an array
+//mapped over the array and included only the tags that included pdf.
 function extractLinks(html) {
   var $ = cheerio.load(html);
   const links = Array.from($("a"));
@@ -56,6 +58,7 @@ function extractLinks(html) {
     .filter(href => href.includes("pdf"));
 }
 
+//this function uses the address to retrieve the geoode from google.
 async function getLocationInfo(address) {
   return new Promise((resolve, reject) => {
     const publicConfig = {

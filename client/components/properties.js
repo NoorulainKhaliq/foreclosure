@@ -11,7 +11,12 @@ export default class Properties extends Component {
       coordinates: {
         lat: 0,
         lng: 0
-      }
+      },
+      center: {
+        lat: 40.650002,
+        lng: -73.949997
+      },
+      zoom: 13
     };
     this.setCoordinates = this.setCoordinates.bind(this);
   }
@@ -36,16 +41,22 @@ export default class Properties extends Component {
       coordinates: {
         lat,
         lng
-      }
+      },
+      center: {
+        lat,
+        lng
+      },
+      zoom: 15
     });
+    console.log(this.state);
   }
 
   render() {
     const results =
       this.state.properties.length > 0 ? this.state.properties : null;
     return (
-      <div className="main">
-        <div className="property-list">
+      <div className="main flex">
+        <div className="flex-1 property-list">
           {results &&
             results.map((property, i) => {
               return (
@@ -71,16 +82,26 @@ export default class Properties extends Component {
               );
             })}
         </div>
-        <div>
+        <div className="" style={{ position: "fixed", right: "0" }}>
           <Map
-            center={{ lat: 40.650002, lng: -73.949997 }}
+            center={{ lat: this.state.center.lat, lng: this.state.center.lng }}
             marker={{
               lat: this.state.coordinates.lat,
               lng: this.state.coordinates.lng
             }}
-            zoom={13}
-            containerElement={<div style={{ height: `100%` }} />}
-            mapElement={<div style={{ height: `400px` }} />}
+            zoom={this.state.zoom}
+            containerElement={
+              <div
+                className="flex"
+                style={{ width: `100vh`, height: `100vh` }}
+              />
+            }
+            mapElement={
+              <div
+                className="flex"
+                style={{ width: `100vh`, height: `100vh` }}
+              />
+            }
           />
         </div>
       </div>

@@ -24,12 +24,13 @@ router.get("/", (req, res, next) => {
   //   }
 
   //properties.then(res.json, res.status(500).json);
-  properties.then(r => {
-    res.status(200).json(r);
+  properties.then(response => {
+    res.status(200).json(response);
   });
 });
 
 function gatherData() {
+  //returns a promise
   console.log("gathering data");
   var query = "a";
   var options = {
@@ -42,7 +43,7 @@ function gatherData() {
     request(options, function(err, response, body) {
       if (err) reject(Error(err)); //checking errors
       if (response.statusCode !== 200) reject(body);
-      var $ = cheerio.load(body);
+      var $ = cheerio.load(body); //parses body
       var counter = 0;
       var tempArray = [];
       var day = new Date();
